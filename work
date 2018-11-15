@@ -1,1 +1,114 @@
-嗯
+import xlwt
+import pandas as pd
+def xlwt_excel(filename, xlsxname):
+        x = 0
+        f = open(filename, encoding = 'utf-8') 
+        workbook = xlwt.Workbook(encoding = 'utf-8')
+        sheet = workbook.add_sheet('库存状态')
+        while True:
+            lone = f.readline() # 按行读取
+            print(lone)
+            if lone in ['\n','\r\n']:    #去掉空行
+                continue
+            if not lone:
+                break
+            for i in range(len(lone.split('，'))): # len(结果为4)
+                item = lone.split('，')[i] 
+                sheet.write(x, i, item)
+            x += 1 # 控制行
+        f.close()
+        workbook.save(xlsxname)
+        lc = pd.read_excel('C:/Users/Administrator/Desktop/1.xlsx',header = 0) 
+        print(type(lc))
+        lc = lc.sort_values(by="序号",ascending= True)
+        lc.to_excel('C:/Users/Administrator/Desktop/2.xlsx',index=False,sheet_name='库存状态')
+        print(lc)
+if __name__ == '__main__':
+    filename = ('C:/Users/Administrator/Desktop/1.csv')
+    xlsxname = ('C:/Users/Administrator/Desktop/1.xlsx')
+    xlwt_excel(filename,xlsxname)
+
+
+
+'''''
+import xlwt
+def xlwt_excel(filename, xlsxname):
+    try:
+        x = 0
+        f = open(filename) 
+        workbook = xlwt.Workbook(encoding = 'utf-8')
+        sheet = workbook.add_sheet('库存状态')
+        while True:
+            lone = f.readline() # 按行读取
+            print(lone)
+            if not lone:
+                break # 如果没有内容则退出循环
+            for i in range(len(lone.split('，'))): # len(结果为4)
+                item = lone.split('，')[i] 
+                sheet.write(x, i, item)
+            x += 1 # 控制行
+        f.close()
+        workbook.save(xlsxname)
+    except:
+        print('error')
+
+def file_px(openfile, savefile):
+    try:    
+        dataFile = {}
+        listfile = []
+        filePx = open(openfile)
+        saveFile = open(savefile, 'w')
+        while True:
+            lonet = filePx.readline()
+            print(lonet)
+            if not lonet:
+                break
+            if lonet in ['\n','\r\n']: #去掉空行
+                continue
+            dataFile[lonet[0]] = lonet
+            listfile.append(lonet[0])
+        filePx.close()
+        listfile.sort()
+        print(listfile)
+        for i in listfile:
+            if i == '序':
+                saveFile.write(dataFile['序'])
+                continue
+            saveFile.write(dataFile[str(i)])
+        saveFile.close()
+        return 'ok'
+    except:
+        print('请保持序号连续')
+
+
+if __name__ == "__main__":
+    openfile = 'C:/Users/Administrator/Desktop/1.csv'
+    savefile = 'C:/Users/Administrator/Desktop/2.csv'
+    xlsxfile = 'C:/Users/Administrator/Desktop/1.xlsx'
+
+    backFile = file_px(openfile, savefile)
+    if backFile == 'ok':
+        xlwt_excel(savefile, xlsxfile)
+     ''''''''''
+     
+     
+     
+     
+     
+     import pandas as pd
+import os
+import openpyxl
+from openpyxl import load_workbook
+from openpyxl import workbook
+from openpyxl.styles import Color,Font,alignment
+from openpyxl.styles.colors import BLUE, RED, GREEN, YELLOW
+
+path = os.getcwd()          #get currt path     pd.read_excel(os.path.join(path,‘暂估表.xlsx‘))==pd.read_csv(path + '\\1.csv')
+def csv_to_xlsx_pd():
+     csv = pd.read_csv(path + '\\1.csv',encoding='utf-8',sep=',')
+     
+     csv.to_excel(path + '\\1.xlsx', sheet_name='库存状态',index=False,na_rep='111')
+if __name__ == '__main__':
+     csv_to_xlsx_pd()
+    
+
